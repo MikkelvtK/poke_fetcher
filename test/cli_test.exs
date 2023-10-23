@@ -14,13 +14,17 @@ defmodule CliTest do
       assert parse_args(["-h"]) == :help
     end
 
-    test "should return :help when no arguments" do
-      assert parse_args([]) == :help
+    test "should return 5 as default num when given no arguments" do
+      assert parse_args([]) == 5
     end
 
     test "should return parsed options" do
       assert parse_args(["--num", "5"]) == 5
       assert parse_args(["-n", "5"]) == 5
+    end
+
+    test "should show help when given negative num" do
+      assert parse_args(["--num", "-1"]) == :help
     end
 
     test "should return :help when given invalid options" do
