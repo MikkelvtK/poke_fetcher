@@ -1,7 +1,14 @@
-defmodule PokeFetcher.Cli do
-  def run(argv) do
-    argv
-    |> parse_args()
+defmodule PokeFetcher.CLI do
+  @moduledoc """
+  The CLI module is the starting point of the application. Here main will 
+  called to parse the arguments given and process any action that needs to be
+  take.
+  """
+
+  def main(argv) do
+    case parse_args(argv) do
+      :help -> "Not implemented"
+    end
   end
 
   @doc """

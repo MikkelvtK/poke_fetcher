@@ -2,7 +2,7 @@ defmodule CliTest do
   use ExUnit.Case
   doctest PokeFetcher
 
-  import PokeFetcher.Cli, only: [parse_args: 1]
+  import PokeFetcher.CLI, only: [parse_args: 1]
 
   describe "PokeFetcher.Cli.parse_args/1" do
     test "should fail when given no list" do
