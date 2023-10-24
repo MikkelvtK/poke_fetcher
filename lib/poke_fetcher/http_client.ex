@@ -1,5 +1,6 @@
 defmodule PokeFetcher.HttpClient do
   @base_url "https://pokeapi.co/api/v2/pokemon/"
+  @cache Application.compile_env(:poke_fetcher, :cache)
 
   @doc """
   Fetches all 151 original Pokemon using the base endpoint. 
@@ -24,9 +25,9 @@ defmodule PokeFetcher.HttpClient do
   end
 
   defp _fetch(key, url) do
-    case Cachex.exists?(:poke_fetcher_cache, key) do
+    case Cachex.exists?(@cache, key) do
       {:ok, true} ->
-        Cachex.get(:poke_fetcher_cahe, key)
+        Cachex.get(@cache, key)
 
       {:ok, false} ->
         url
@@ -36,7 +37,7 @@ defmodule PokeFetcher.HttpClient do
   end
 
   defp handle_response({_, %{status_code: status_code, body: body}}, key) do
-    Cachex.put(:poke_fetcher_cache, key, body)
+    Cachex.put(@cache, key, body)
 
     {
       check_for_error(status_code),
