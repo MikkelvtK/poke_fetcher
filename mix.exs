@@ -24,7 +24,8 @@ defmodule PokeFetcher.MixProject do
     [
       {:httpoison, "~> 2.0"},
       {:jason, "~> 1.4"},
-      {:cachex, "~> 3.6"}
+      {:cachex, "~> 3.6"},
+      {:stream_data, ">= 0.0.0"}
     ]
   end
 end

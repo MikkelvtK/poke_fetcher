@@ -27,7 +27,8 @@ defmodule PokeFetcher.HttpClient do
   defp _fetch(key, url) do
     case Cachex.exists?(@cache, key) do
       {:ok, true} ->
-        Cachex.get(@cache, key)
+        Cachex.get!(@cache, key)
+        |> Jason.decode()
 
       {:ok, false} ->
         url

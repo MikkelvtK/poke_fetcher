@@ -38,4 +38,7 @@ defmodule PokeFetcher.CLI do
   defp parse_helper({:ok, [num: num]}) when num > 0, do: num
   defp parse_helper({:ok, [help: _]}), do: :help
   defp parse_helper({:ok, _}), do: :help
+
+  def process(num) do
+  end
 end
