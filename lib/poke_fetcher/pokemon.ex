@@ -2,7 +2,7 @@ defmodule PokeFetcher.Pokemon do
   @moduledoc """
   Handles data related to Pokemon
   """
-  @type t :: %__MODULE__{id: Integer.t(), name: String.t(), types: [String.t()]}
+  @type t :: %__MODULE__{id: integer(), name: String.t(), types: [String.t()]}
 
   @enforce_keys [:id, :name, :types]
   defstruct [:id, :name, :types]
@@ -22,6 +22,12 @@ defmodule PokeFetcher.Pokemon do
     }
   end
 
+  @doc """
+  This function takes a list of `pokemons` returned from the API and a
+  `num`. It will retrieve all the names of the `pokemons`, shuffle them and
+  take `num` of them.
+  """
+  @spec get_pokemon_list(map(), non_neg_integer()) :: list(String.t())
   def get_pokemon_list(pokemons, num) do
     pokemons
     |> get_in(["results", Access.all(), "name"])

@@ -1,13 +1,11 @@
 defmodule PokeFetcher.CLI do
   @moduledoc """
-  The CLI module is the starting point of the application. Here main will 
-  called to parse the arguments given and process any action that needs to be
-  take.
+  Holds main business logic
   """
 
   def main(argv) do
     case parse_args(argv) do
-      :help -> "Not implemented"
+      :help -> print_usage()
       num -> process(num) |> IO.inspect()
     end
   end
@@ -40,6 +38,12 @@ defmodule PokeFetcher.CLI do
   defp parse_helper({:ok, [help: _]}), do: :help
   defp parse_helper({:ok, _}), do: :help
 
+  @doc """
+  Process handles the situation when no arguments are given or a `num` is given.
+  It will fetch a full list of pokemons from the api. It will shuffle that list.
+  Then it will take `num` amounts of Pokemons from that list to get more details for.
+  """
+  @spec process(non_neg_integer()) :: [PokeFetcher.Pokemon.t()]
   def process(num) do
     PokeFetcher.HttpClient.fetch()
     |> handle_error()
@@ -66,5 +70,15 @@ defmodule PokeFetcher.CLI do
     pokemons
     |> Enum.map(fn pokemon -> Task.async(fn -> func.(pokemon) end) end)
     |> Enum.map(fn tsk -> Task.await(tsk) end)
+  end
+
+  defp print_usage do
+    IO.puts("""
+    Returns random Pokemons.
+
+    Options
+      --num, -n <integer>   returns num amount of pokemons
+      --help, -h            prints help
+    """)
   end
 end

@@ -1,4 +1,7 @@
 defmodule PokeFetcher.HttpClient do
+  @moduledoc """
+  Handles all communication with the PokeApi
+  """
   @base_url "https://pokeapi.co/api/v2/pokemon/"
   @cache Application.compile_env(:poke_fetcher, :cache)
 
