@@ -8,6 +8,7 @@ defmodule PokeFetcher.CLI do
   def main(argv) do
     case parse_args(argv) do
       :help -> "Not implemented"
+      num -> process(num)
     end
   end
 
@@ -43,7 +44,8 @@ defmodule PokeFetcher.CLI do
     PokeFetcher.HttpClient.fetch()
     |> handle_error()
     |> PokeFetcher.Pokemon.get_pokemon_list(num)
-    |> Enum.map(&process_pokemon/1)
+    |> pmap(&process_pokemon/1)
+    |> IO.inspect()
   end
 
   defp handle_error({:ok, res}), do: res
@@ -59,5 +61,11 @@ defmodule PokeFetcher.CLI do
     |> PokeFetcher.HttpClient.fetch()
     |> handle_error()
     |> PokeFetcher.Pokemon.new()
+  end
+
+  defp pmap(pokemons, func) do
+    pokemons
+    |> Enum.map(fn pokemon -> Task.async(fn -> func.(pokemon) end) end)
+    |> Enum.map(fn tsk -> Task.await(tsk) end)
   end
 end
