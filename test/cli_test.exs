@@ -6,6 +6,7 @@ defmodule CliTest do
   import PokeFetcher.CLI, only: [parse_args: 1, process: 1]
 
   @cache Application.compile_env(:poke_fetcher, :cache)
+  @key :pokemon
 
   describe "PokeFetcher.Cli.parse_args/1" do
     test "should fail when given no list" do
@@ -40,17 +41,15 @@ defmodule CliTest do
 
   describe "PokeFetcher.CLI.process/1" do
     setup do
-      key = :pokemon
-
       data =
         Path.absname("test/test_data/pokemon.txt")
         |> File.read!()
 
-      Cachex.put(@cache, key, data)
+      Cachex.put(@cache, @key, data)
 
       [
         cache: @cache,
-        key: key
+        key: @key
       ]
     end
 
@@ -62,14 +61,14 @@ defmodule CliTest do
 
       check all(
               num <- integer(),
-              num > 0 and num <= 151
+              num > 0
             ) do
         result = process(num)
 
         assert length(result) == num
 
         Enum.each(result, fn pokemon ->
-          assert result.name in data
+          assert pokemon.name in data
         end)
       end
     end

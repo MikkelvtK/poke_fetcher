@@ -40,5 +40,24 @@ defmodule PokeFetcher.CLI do
   defp parse_helper({:ok, _}), do: :help
 
   def process(num) do
+    PokeFetcher.HttpClient.fetch()
+    |> handle_error()
+    |> PokeFetcher.Pokemon.get_pokemon_list(num)
+    |> Enum.map(&process_pokemon/1)
+  end
+
+  defp handle_error({:ok, res}), do: res
+
+  defp handle_error({:error, msg}) do
+    IO.puts(:stderr, "error fetching from api: #{msg}")
+    System.halt(1)
+  end
+
+  defp process_pokemon(pokemon) do
+    pokemon
+    |> String.to_atom()
+    |> PokeFetcher.HttpClient.fetch()
+    |> handle_error()
+    |> PokeFetcher.Pokemon.new()
   end
 end

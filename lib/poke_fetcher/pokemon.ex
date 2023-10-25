@@ -21,4 +21,11 @@ defmodule PokeFetcher.Pokemon do
       types: get_in(body, ["types", Access.all(), "type", "name"])
     }
   end
+
+  def get_pokemon_list(pokemons, num) do
+    pokemons
+    |> get_in(["results", Access.all(), "name"])
+    |> Enum.shuffle()
+    |> Enum.take(num)
+  end
 end
