@@ -8,7 +8,7 @@ defmodule PokeFetcher.CLI do
   def main(argv) do
     case parse_args(argv) do
       :help -> "Not implemented"
-      num -> process(num)
+      num -> process(num) |> IO.inspect()
     end
   end
 
@@ -45,7 +45,6 @@ defmodule PokeFetcher.CLI do
     |> handle_error()
     |> PokeFetcher.Pokemon.get_pokemon_list(num)
     |> pmap(&process_pokemon/1)
-    |> IO.inspect()
   end
 
   defp handle_error({:ok, res}), do: res
