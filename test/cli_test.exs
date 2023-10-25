@@ -59,10 +59,7 @@ defmodule CliTest do
         |> Jason.decode!()
         |> get_in(["results", Access.all(), "name"])
 
-      check all(
-              num <- integer(),
-              num > 0
-            ) do
+      check all(num <- non_negative_integer(), max_runs: 10) do
         result = process(num)
 
         assert length(result) == num

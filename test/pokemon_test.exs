@@ -37,20 +37,14 @@ defmodule PokemonTest do
     end
 
     property "should return list of pokemon equal to num", fixture do
-      check all(
-              num <- integer(),
-              num > 0
-            ) do
+      check all(num <- non_negative_integer()) do
         result = get_pokemon_list(fixture.data, num)
         assert length(result) == num
       end
     end
 
     property "should return values present in initial argument", fixture do
-      check all(
-              num <- integer(),
-              num > 0
-            ) do
+      check all(num <- non_negative_integer()) do
         result = get_pokemon_list(fixture.data, num)
         names = get_in(fixture.data, ["results", Access.all(), "name"])
         Enum.each(result, fn pokemon -> assert pokemon in names end)
